@@ -16,8 +16,62 @@
     <!-- 预加载FFmpeg库 -->
     <link rel="preload" href="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js" as="script" crossorigin="anonymous">
     <link rel="preload" href="https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js" as="script" crossorigin="anonymous">
+    <!-- GitHub Pages提示信息样式 -->
+    <style>
+        .github-notice {
+            background-color: #ffe082;
+            color: #755600;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            line-height: 1.5;
+            position: relative;
+        }
+        .github-notice h3 {
+            margin-top: 0;
+            color: #5d4200;
+        }
+        .github-notice a {
+            color: #0366d6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .github-notice a:hover {
+            text-decoration: underline;
+        }
+        .github-notice code {
+            background: rgba(255,255,255,0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .close-notice {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #755600;
+        }
+    </style>
 </head>
 <body>
+    <!-- GitHub Pages提示信息 -->
+    <div class="github-notice" id="github-notice">
+        <span class="close-notice" onclick="document.getElementById('github-notice').style.display='none'">×</span>
+        <h3>⚠️ 功能受限提示</h3>
+        <p>由于GitHub Pages仅支持静态内容，完整的视频压缩功能无法在此环境中运行。要使用完整功能，请按照以下步骤操作：</p>
+        <ol>
+            <li><a href="https://github.com/ReganJiang-jhy/video-compressor/archive/refs/heads/main.zip">下载项目源码</a></li>
+            <li>解压文件到本地文件夹</li>
+            <li>双击运行<code>启动工具.bat</code>文件</li>
+            <li>在打开的浏览器中使用完整功能</li>
+        </ol>
+        <p>本工具需要本地服务器提供特定的HTTP头支持才能使用SharedArrayBuffer功能。</p>
+    </div>
+
     <!-- 顶部导航栏 -->
     <header class="header">
         <div class="container">
