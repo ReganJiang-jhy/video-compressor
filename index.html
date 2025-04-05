@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频压缩工具</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- 跨域隔离支持 -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+    <!-- 样式和图标库 -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
+    <!-- 预加载FFmpeg库 -->
+    <link rel="preload" href="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js" as="script" crossorigin="anonymous">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <h1>视频压缩工具</h1>
+            </div>
+            <div class="help-link">
+                <a href="offline.html" title="查看离线使用说明"><i class="fas fa-question-circle"></i> 遇到问题？</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+        <div class="container">
+            <!-- 上传区域 -->
+            <section class="upload-section" id="upload-area">
+                <div class="upload-container" id="drop-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h2>上传视频</h2>
+                    <p>拖放视频文件到此处或</p>
+                    <label for="file-input" class="upload-btn">选择文件</label>
+                    <input type="file" id="file-input" accept="video/*" hidden>
+                    <p class="supported-formats">支持的格式: MP4, AVI, MOV, WEBM 等</p>
+                </div>
+            </section>
+
+            <!-- 压缩设置区域 (初始隐藏) -->
+            <section class="compression-section" id="compression-settings" style="display: none;">
+                <h2>压缩设置</h2>
+                <div class="settings-container">
+                    <div class="setting-item">
+                        <label for="compression-ratio">压缩比例</label>
+                        <div class="range-container">
+                            <input type="range" id="compression-ratio" min="10" max="90" value="50">
+                            <span id="ratio-value">50%</span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label for="quality-preset">压缩质量</label>
+                        <select id="quality-preset">
+                            <option value="low">流畅 (低质量)</option>
+                            <option value="medium" selected>标准 (中等质量)</option>
+                            <option value="high">高清 (高质量)</option>
+                        </select>
+                    </div>
+                    <button id="start-compression" class="primary-btn">开始压缩</button>
+                </div>
+            </section>
+
+            <!-- 视频预览区域 (初始隐藏) -->
+            <section class="preview-section" id="video-preview" style="display: none;">
+                <h2>视频预览</h2>
+                <div class="preview-container">
+                    <div class="video-card">
+                        <h3>原始视频</h3>
+                        <video id="original-video" controls></video>
+                        <div class="video-info">
+                            <p>文件名: <span id="original-filename">-</span></p>
+                            <p>文件大小: <span id="original-size">-</span></p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <h3>压缩后视频</h3>
+                        <video id="compressed-video" controls></video>
+                        <div class="video-info">
+                            <p>文件大小: <span id="compressed-size">-</span></p>
+                            <p>压缩率: <span id="compression-rate">-</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="download-section">
+                    <button id="download-btn" class="primary-btn" disabled>下载压缩后的视频</button>
+                </div>
+            </section>
+
+            <!-- 加载中提示 (初始隐藏) -->
+            <div class="loading-overlay" id="loading-overlay" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p id="loading-text">视频压缩中，请稍候...</p>
+                <p id="progress-text">0%</p>
+            </div>
+            
+            <!-- FFmpeg加载失败提示 (初始隐藏) -->
+            <div class="error-message" id="ffmpeg-error" style="display: none;">
+                <div class="error-content">
+                    <h3><i class="fas fa-exclamation-circle"></i> 加载失败</h3>
+                    <p>无法加载视频处理组件(FFmpeg)，可能原因：</p>
+                    <ul>
+                        <li>网络连接问题</li>
+                        <li>浏览器兼容性问题</li>
+                        <li>跨域资源加载被阻止</li>
+                    </ul>
+                    <p>请尝试：</p>
+                    <ul>
+                        <li>检查网络连接</li>
+                        <li>使用Chrome/Firefox最新版本</li>
+                        <li>使用下方的本地服务器运行</li>
+                    </ul>
+                    <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                        <button onclick="location.reload()">刷新页面</button>
+                        <a href="offline.html" style="display: inline-block; background-color: #34c759; color: white; padding: 10px 20px; border-radius: 20px; text-decoration: none;">查看离线使用方法</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 视频压缩工具 - 快速、简便的在线视频压缩服务</p>
+        </div>
+    </footer>
+
+    <!-- 加载FFmpeg库 -->
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js" crossorigin="anonymous"></script>
+    
+    <!-- 主要 JavaScript 文件 -->
+    <script src="js/app.js"></script>
+</body>
+</html> 

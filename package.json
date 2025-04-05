@@ -1,0 +1,21 @@
+{
+  "name": "video-compressor",
+  "version": "1.0.0",
+  "description": "一个基于浏览器的视频压缩工具",
+  "main": "node_server.js",
+  "scripts": {
+    "start": "node node_server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "video",
+    "compression",
+    "ffmpeg",
+    "browser"
+  ],
+  "author": "你的名字",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+} 
